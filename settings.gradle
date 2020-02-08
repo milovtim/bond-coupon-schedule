@@ -1,0 +1,3 @@
+rootProject.name = 'bonds-info-provider'
+projects=['info-provider']
+
