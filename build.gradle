@@ -1,8 +1,4 @@
-group 'ru.milovtim'
-version '1.0-SNAPSHOT'
 
-
-    
 allprojects {
     
     repositories {
@@ -10,3 +6,20 @@ allprojects {
     }
 }
 
+project(':tinkoff-invest-java-sdk/sdk') {
+    apply plugin: 'java'
+
+    group 'ru.tinkoff.invest'
+    version '0.4-SNAPSHOT'
+
+    sourceCompatibility = 1.11
+    targetCompatibility = 1.11
+
+    compileJava {
+        options.encoding = 'UTF-8'
+    }
+
+    compileTestJava {
+        options.encoding = 'UTF-8'
+    }
+}
