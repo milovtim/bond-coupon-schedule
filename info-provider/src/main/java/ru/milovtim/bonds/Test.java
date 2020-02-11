@@ -10,6 +10,7 @@ import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import ru.milovtim.bonds.pojo.UserAccounts;
 import ru.milovtim.bonds.service.TinkofInvestAPIClient;
@@ -42,6 +43,7 @@ public class Test {
             .addConverterFactory(JacksonConverterFactory.create())
             .client(httpClient)
             .baseUrl(getApiUrl(args.length > 1 && Boolean.parseBoolean(args[1])))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
         TinkofInvestAPIClient apiClient = retrofit.create(TinkofInvestAPIClient.class);

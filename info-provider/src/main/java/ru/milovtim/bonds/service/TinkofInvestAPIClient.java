@@ -1,6 +1,7 @@
 package ru.milovtim.bonds.service;
 
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -11,9 +12,9 @@ import ru.tinkoff.invest.openapi.data.OpenApiResponse;
 public interface TinkofInvestAPIClient {
 
     @GET("user/accounts")
-    Call<OpenApiResponse<UserAccounts>> getUserAccounts();
+    Observable<OpenApiResponse<UserAccounts>> getUserAccounts();
 
     @GET("portfolio")
-    Call<OpenApiResponse<AccountPortfolio>> getAccountPortfolio(@Query("brokerAccountId") String brokerAccountId);
+    Observable<OpenApiResponse<AccountPortfolio>> getAccountPortfolio(@Query("brokerAccountId") String brokerAccountId);
 
 }
