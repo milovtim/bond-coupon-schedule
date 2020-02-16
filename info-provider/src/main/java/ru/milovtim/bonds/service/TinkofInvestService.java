@@ -1,16 +1,21 @@
 package ru.milovtim.bonds.service;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.internal.operators.observable.ObservableAll;
 import ru.milovtim.bonds.pojo.AccountPortfolio;
 import ru.milovtim.bonds.pojo.UserAccounts;
 import ru.tinkoff.invest.openapi.data.OpenApiResponse;
 import ru.tinkoff.invest.openapi.exceptions.OpenApiException;
+
+import static java.util.stream.Collectors.toMap;
 
 public class TinkofInvestService {
 
@@ -22,42 +27,25 @@ public class TinkofInvestService {
 
 
     public Map<String, AccountPortfolio> getPortfolioByAccount() {
-        OpenApiResponse<UserAccounts> userAccountsResp = null;
-        try {
-            userAccountsResp = apiClient.getUserAccounts()
-                .flatMap(userAccountsApiResp -> {
-                    checkStatus(userAccountsApiResp);
-                    List<UserAccounts.UserAccount> accounts = userAccountsApiResp.payload.getAccounts();
-//                    ListIterator<UserAccounts.UserAccount> accIter = accounts.listIterator();
-                    Observable<Object> collect = accounts.stream().map(acc -> apiClient.getAccountPortfolio(acc.getBrokerAccountId()))
-                        .map(apiResp -> apiResp)
-                        .collect(Observable::empty, (accumulator, respObservable) -> accumulator.join(respObservable),
-                            (observable, observable2) -> observable.join(observable2));
+        Observable<Map.Entry<String, AccountPortfolio>> portfolioObs = apiClient.getUserAccounts()
+            .map(accApiResp -> {
+                UserAccounts payload = accApiResp.payload;
+                return payload.getAccounts();
+            })
+            .flatMap(userAccounts -> userAccounts.stream()
+                .map(userAccount -> {
+                    Observable<Map.Entry<String, AccountPortfolio>> portfObs = apiClient
+                        .getAccountPortfolio(userAccount.getBrokerAccountId())
+                        .map(portfolioApiResp -> new AbstractMap.SimpleImmutableEntry<>(
+                            userAccount.getBrokerAccountType(),
+                            portfolioApiResp.payload));
+                    return portfObs;
                 })
+                .reduce((obs1, obs2) -> obs1.mergeWith(obs2)).orElse(Observable.empty()));
 
-            Map<String, AccountPortfolio> result = userAccountsResp.payload.getAccounts().stream().collect(Collectors.toMap(
-                UserAccounts.UserAccount::getBrokerAccountType,
-                userAccount -> {
-                    OpenApiResponse<AccountPortfolio> portResp = null;
-                    try {
-                        portResp = apiClient.getAccountPortfolio(
-                            userAccount.getBrokerAccountId()).execute().body();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if ("Ok".equalsIgnoreCase(portResp.status)) {
-                        AccountPortfolio accountPortfolio = portResp.payload;
-                        return accountPortfolio;
-                    } else {
-                        throw new IllegalStateException("Cannot get portfolio for account'" +
-                            userAccount.getBrokerAccountId() + "'");
-                    }
-                }
-            ));
-            return result;
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return portfolioObs.toList()
+            .map(e -> e.stream().collect(toMap(Map.Entry::getKey, Map.Entry::getValue)))
+            .blockingGet();
     }
 
     private static void checkStatus(OpenApiResponse<?> apiResponse) {
@@ -66,7 +54,7 @@ public class TinkofInvestService {
                 OpenApiException oae = (OpenApiException) apiResponse.payload;
                 throw new RuntimeException("Error during API call: " + oae.getCode(), oae);
             } else {
-                throw new RuntimeException(((Object) apiResponse.payload).toString());
+                throw new RuntimeException(apiResponse.payload.toString());
             }
         }
     }
