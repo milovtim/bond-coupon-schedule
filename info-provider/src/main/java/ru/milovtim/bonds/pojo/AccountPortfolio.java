@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.Data;
-import ru.tinkoff.invest.openapi.data.InstrumentType;
-import ru.tinkoff.invest.openapi.data.MoneyAmount;
+import ru.tinkoff.invest.openapi.models.market.InstrumentType;
+import ru.tinkoff.invest.openapi.models.MoneyAmount;
 
 @Data
 public class AccountPortfolio {

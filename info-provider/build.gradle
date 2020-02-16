@@ -17,7 +17,7 @@ dependencies {
         [group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.7.1'],
         [group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.7.1'],
     )
-    compile project(':tinkoff-invest-java-sdk/sdk')
+    compile project(':tinkoff-invest-java-sdk/core')
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'

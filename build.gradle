@@ -1,25 +1,33 @@
-
 allprojects {
-    
     repositories {
         mavenCentral()
     }
 }
 
-project(':tinkoff-invest-java-sdk/sdk') {
+configure(subprojects.findAll {it.name in ['tinkoff-invest-java-sdk/core', 'tinkoff-invest-java-sdk/sdk-java8']}) {
     apply plugin: 'java'
-
     group 'ru.tinkoff.invest'
     version '0.4-SNAPSHOT'
-
-    sourceCompatibility = 1.11
-    targetCompatibility = 1.11
-
     compileJava {
         options.encoding = 'UTF-8'
     }
-
     compileTestJava {
         options.encoding = 'UTF-8'
+    }
+}
+
+project(':tinkoff-invest-java-sdk/core') {
+    dependencies {
+        compile (
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.2'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.2'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.2'],
+            [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.10.2'],
+            [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.10.2'],
+            [group: 'org.jetbrains', name: 'annotations', version: '13.0'],
+        )
+    }
+    test {
+        useJUnitPlatform()
     }
 }

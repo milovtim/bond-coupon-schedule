@@ -1,3 +1,5 @@
 rootProject.name = 'bonds-info-provider'
-include 'info-provider', 'tinkoff-invest-java-sdk/sdk'
+include 'tinkoff-invest-java-sdk/core'
+//include 'tinkoff-invest-java-sdk/sdk-java8'
+include 'info-provider'
 

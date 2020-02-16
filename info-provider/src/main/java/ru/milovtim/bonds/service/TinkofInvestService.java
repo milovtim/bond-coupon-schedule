@@ -1,19 +1,14 @@
 package ru.milovtim.bonds.service;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.AbstractMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.internal.operators.observable.ObservableAll;
 import ru.milovtim.bonds.pojo.AccountPortfolio;
 import ru.milovtim.bonds.pojo.UserAccounts;
-import ru.tinkoff.invest.openapi.data.OpenApiResponse;
 import ru.tinkoff.invest.openapi.exceptions.OpenApiException;
+import ru.tinkoff.invest.openapi.models.ResponseStatus;
+import ru.tinkoff.invest.openapi.models.RestResponse;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -48,8 +43,8 @@ public class TinkofInvestService {
             .blockingGet();
     }
 
-    private static void checkStatus(OpenApiResponse<?> apiResponse) {
-        if (!"OK".equalsIgnoreCase(apiResponse.status)) {
+    private static void checkStatus(RestResponse<?> apiResponse) {
+        if (apiResponse.status != ResponseStatus.OK) {
             if (apiResponse.payload instanceof OpenApiException) {
                 OpenApiException oae = (OpenApiException) apiResponse.payload;
                 throw new RuntimeException("Error during API call: " + oae.getCode(), oae);
