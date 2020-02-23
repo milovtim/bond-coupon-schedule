@@ -4,21 +4,29 @@ plugins {
 
 group 'ru.milovtim'
 version '1.0-SNAPSHOT'
-sourceCompatibility = 1.11
+sourceCompatibility = 1.8
 
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.0'
-
     compile(
+        [group: 'com.google.inject', name: 'guice', version: '4.2.2'],
         [group: 'org.jsoup', name: 'jsoup', version: '1.12.1'],
         [group: 'ical4j', name: 'ical4j', version: '0.9.20'],
-        [ group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.17'],
+        [group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.17'],
         [group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.7.1'],
         [group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.7.1'],
         [group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: '2.7.1'],
+        project(':tinkoff-invest-java-sdk/core')
     )
-    compile project(':tinkoff-invest-java-sdk/core')
-
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+}
+
+def configDir = getRootProject().file('tinkoff-invest-java-sdk/sdk-java8/src/main/resources')
+sourceSets {
+    main {
+        resources {
+            srcDir(configDir)
+        }
+    }
 }
