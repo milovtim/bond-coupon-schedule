@@ -12,10 +12,10 @@ import static java.util.stream.Collectors.toMap;
 
 public class TinkoffInvestService {
 
-    private final TinkofInvestAPIClient apiClient;
+    private final TinkoffInvestAPIClient apiClient;
 
     @Inject
-    public TinkoffInvestService(TinkofInvestAPIClient apiClient) {
+    public TinkoffInvestService(TinkoffInvestAPIClient apiClient) {
         this.apiClient = apiClient;
     }
 

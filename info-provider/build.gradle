@@ -10,6 +10,7 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.0'
     compile(
         [group: 'com.google.inject', name: 'guice', version: '4.2.2'],
+        [group: 'de.skuzzle.inject', name: 'reguice', version: '0.3.0'],
         [group: 'org.jsoup', name: 'jsoup', version: '1.12.1'],
         [group: 'ical4j', name: 'ical4j', version: '0.9.20'],
         [group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.17'],

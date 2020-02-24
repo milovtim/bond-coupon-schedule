@@ -8,7 +8,7 @@ import ru.milovtim.bonds.pojo.UserAccounts;
 import ru.tinkoff.invest.openapi.models.RestResponse;
 import ru.tinkoff.invest.openapi.models.portfolio.Portfolio;
 
-public interface TinkofInvestAPIClient {
+public interface TinkoffInvestAPIClient {
 
     @GET("user/accounts")
     Observable<RestResponse<UserAccounts>> getUserAccounts();
