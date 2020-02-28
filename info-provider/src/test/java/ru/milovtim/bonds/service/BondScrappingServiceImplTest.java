@@ -19,6 +19,7 @@ import ru.milovtim.bonds.module.ThirdPartyConfig;
 import ru.milovtim.bonds.pojo.BondPaymentSchedule;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
@@ -42,6 +43,8 @@ class BondScrappingServiceImplTest {
         when(client.getBondPage(anyString())).thenReturn(Observable.just(getRespBodyFromFile()));
         BondPaymentSchedule schedule = service.getBondSchedule("hello");
         assertNotNull(schedule);
+        assertNotNull(schedule.getPayments());
+        assertEquals(15, schedule.getPayments().size());
     }
 
     @NotNull
@@ -53,6 +56,6 @@ class BondScrappingServiceImplTest {
     @Test
     void playWithJsoup() throws Exception {
         Document doc = Jsoup.parse(getRespBodyFromFile().byteStream(), UTF_8.name(), "https://smart-lab.ru");
- (th       assertNotNull(doc);
+        assertNotNull(doc);
     }
 }

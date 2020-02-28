@@ -1,18 +1,17 @@
 package ru.milovtim.bonds.service;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import ru.milovtim.bonds.module.ThirdPartyConfig;
 import ru.milovtim.bonds.pojo.BondPaymentSchedule;
+import ru.milovtim.bonds.pojo.adapter.BondsScheduleHtmlTableParserImpl;
 
 public class BondScrappingServiceImpl implements BondScrappingService {
 
@@ -42,19 +41,16 @@ public class BondScrappingServiceImpl implements BondScrappingService {
     //doc = Jsoup.connect("https://smart-lab.ru/q/bonds/RU000A0JWXQ7/").get();
     @Override
     public BondPaymentSchedule getBondSchedule(String isin) {
-        List<BondPaymentSchedule.BondPayment> coupons =
+        Collection<? extends BondPaymentSchedule.BondPayment> coupons =
             httpClient.getBondPage(isin)
                 .map(ResponseBody::byteStream)
                 .map(this::parseSmartlabResponse)
-                .map(doc -> doc.select(".simple-little-table.bond tbody").eq(1).select("tr").stream()
-                    .skip(1)//skip table header
-                    //todo fill POJO with data from html table
-                    .map(element -> new BondPaymentSchedule.BondPayment())
-                    .collect(Collectors.toList())
-                ).blockingFirst();
+                .map(BondsScheduleHtmlTableParserImpl::new)
+                .map(BondsScheduleHtmlTableParserImpl::getData)
+                .blockingFirst();
 
         BondPaymentSchedule schedule = new BondPaymentSchedule();
-        schedule.setPayments(coupons);
+        schedule.setPayments(new ArrayList<>(coupons));
         return schedule;
     }
 }
