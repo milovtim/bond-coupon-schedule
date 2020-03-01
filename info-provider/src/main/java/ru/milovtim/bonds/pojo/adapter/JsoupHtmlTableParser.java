@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.jsoup.nodes.Document;
 
-public abstract class JsoupHtmlTableParser<T> {
+public abstract class JsoupHtmlTableParser<P, I> {
     private final Document htmlTableDoc;
 
     public JsoupHtmlTableParser(Document htmlTableDoc) {
@@ -15,5 +15,7 @@ public abstract class JsoupHtmlTableParser<T> {
         return htmlTableDoc;
     }
 
-    public abstract Collection<? extends T> getData();
+    public abstract Collection<? extends P> getPayments();
+
+    public abstract I getInfo();
 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.milovtim.bonds.module.ThirdPartyConfig;
+import ru.milovtim.bonds.module.config.ThirdPartyConfig;
 import ru.milovtim.bonds.pojo.BondPaymentSchedule;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

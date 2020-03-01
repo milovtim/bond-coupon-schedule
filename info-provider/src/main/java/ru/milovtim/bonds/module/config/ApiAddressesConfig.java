@@ -1,4 +1,4 @@
-package ru.milovtim.bonds.module;
+package ru.milovtim.bonds.module.config;
 
 import javax.inject.Inject;
 import java.util.Map;

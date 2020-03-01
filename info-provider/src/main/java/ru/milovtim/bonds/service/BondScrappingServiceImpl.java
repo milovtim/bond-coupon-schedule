@@ -9,7 +9,7 @@ import java.util.Collection;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import ru.milovtim.bonds.module.ThirdPartyConfig;
+import ru.milovtim.bonds.module.config.ThirdPartyConfig;
 import ru.milovtim.bonds.pojo.BondPaymentSchedule;
 import ru.milovtim.bonds.pojo.adapter.BondsScheduleHtmlTableParserImpl;
 
@@ -26,7 +26,7 @@ public class BondScrappingServiceImpl implements BondScrappingService {
 
     @Override
     public void getBondData(String isin) {
-
+        throw new RuntimeException("Not implemented yet");
     }
 
 
@@ -46,9 +46,8 @@ public class BondScrappingServiceImpl implements BondScrappingService {
                 .map(ResponseBody::byteStream)
                 .map(this::parseSmartlabResponse)
                 .map(BondsScheduleHtmlTableParserImpl::new)
-                .map(BondsScheduleHtmlTableParserImpl::getData)
+                .map(BondsScheduleHtmlTableParserImpl::getPayments)
                 .blockingFirst();
-
         BondPaymentSchedule schedule = new BondPaymentSchedule();
         schedule.setPayments(new ArrayList<>(coupons));
         return schedule;

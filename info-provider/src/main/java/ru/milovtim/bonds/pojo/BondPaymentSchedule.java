@@ -10,6 +10,7 @@ import ru.tinkoff.invest.openapi.models.MoneyAmount;
 
 @Data
 public class BondPaymentSchedule {
+    
     List<BondPayment> payments;
 
     @Data

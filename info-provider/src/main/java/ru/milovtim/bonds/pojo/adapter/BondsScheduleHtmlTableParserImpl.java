@@ -5,15 +5,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.javatuples.Pair;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import ru.milovtim.bonds.pojo.BondPaymentSchedule;
 import ru.tinkoff.invest.openapi.models.Currency;
 import ru.tinkoff.invest.openapi.models.MoneyAmount;
 
-public class BondsScheduleHtmlTableParserImpl extends JsoupHtmlTableParser<BondPaymentSchedule.BondPayment> {
+public class BondsScheduleHtmlTableParserImpl
+    extends JsoupHtmlTableParser<BondPaymentSchedule.BondPayment, Map<String, String>> {
+
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-uuuu");
 
     public BondsScheduleHtmlTableParserImpl(Document htmlDocWithTable) {
@@ -21,7 +25,19 @@ public class BondsScheduleHtmlTableParserImpl extends JsoupHtmlTableParser<BondP
     }
 
     @Override
-    public Collection<? extends BondPaymentSchedule.BondPayment> getData() {
+    public Map<String, String> getInfo() {
+        return this.getHtmlTableDoc()
+            .select(".simple-little-table.bond tbody")
+            .eq(0)//bond summary is the first table
+            .select("tr").stream()
+            .skip(1)//skip table header
+            .map(tr -> Pair.fromIterable(tr.select("td"), 0))
+            .filter(pair -> pair.getValue0() != null && pair.getValue1() != null)
+            .collect(Collectors.toMap(pair -> pair.getValue0().text(), pair -> pair.getValue1().text()));
+    }
+
+    @Override
+    public Collection<? extends BondPaymentSchedule.BondPayment> getPayments() {
         return this.getHtmlTableDoc()
             .select(".simple-little-table.bond tbody")
             .eq(1)//skip bond summary
