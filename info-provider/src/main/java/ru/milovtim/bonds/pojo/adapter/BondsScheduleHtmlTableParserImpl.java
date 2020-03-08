@@ -33,7 +33,8 @@ public class BondsScheduleHtmlTableParserImpl
             .skip(1)//skip table header
             .map(tr -> Pair.fromIterable(tr.select("td"), 0))
             .filter(pair -> pair.getValue0() != null && pair.getValue1() != null)
-            .collect(Collectors.toMap(pair -> pair.getValue0().text(), pair -> pair.getValue1().text()));
+            .collect(Collectors.toMap(pair -> pair.getValue0().text(), pair -> pair.getValue1().text(),
+                (o, o2) -> o2)/* <-- дата офёрты в таблице встречалась дважды*/);
     }
 
     @Override

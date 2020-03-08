@@ -1,4 +1,3 @@
-rootProject.name = 'bonds-info-provider'
 include 'tinkoff-invest-java-sdk/core'
 //include 'tinkoff-invest-java-sdk/sdk-java8' did not use their api client
 include 'info-provider'
