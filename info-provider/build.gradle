@@ -15,7 +15,7 @@ dependencies {
         [group: 'com.google.inject', name: 'guice', version: '4.2.2'],
         [group: 'de.skuzzle.inject', name: 'reguice', version: '0.3.0'],
         [group: 'org.jsoup', name: 'jsoup', version: '1.12.1'],
-        [group: 'ical4j', name: 'ical4j', version: '0.9.20'],
+        [group: 'org.mnode.ical4j', name: 'ical4j', version: '3.0.14'],
         [group: 'org.javatuples', name: 'javatuples', version: '1.2'],
         [group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.17'],
         [group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.7.1'],
